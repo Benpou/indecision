@@ -1,15 +1,13 @@
 'use strict';
 
-console.log("App.js is running.");
+console.log('App.js is running!');
 
-// JSX
 var app = {
-  title: 'React',
-  subtitle: 'React app',
-  option: ['One', 'Two']
+  title: 'Indecision App',
+  subtitle: 'Put your life in the hands of a computer',
+  options: ['One', 'Two']
 };
-
-var templateOne = React.createElement(
+var template = React.createElement(
   'div',
   null,
   React.createElement(
@@ -25,7 +23,7 @@ var templateOne = React.createElement(
   React.createElement(
     'p',
     null,
-    app.option && app.option.length > 0 ? app.option : 'No Option'
+    app.options.length > 0 ? 'Here are your options' : 'No options'
   ),
   React.createElement(
     'ol',
@@ -44,11 +42,10 @@ var templateOne = React.createElement(
 );
 
 var user = {
-  name: 'Ben',
-  age: 29,
-  location: 'usa'
+  name: 'Andrew',
+  age: 26,
+  location: 'Philadelphia'
 };
-
 function getLocation(location) {
   if (location) {
     return React.createElement(
@@ -59,18 +56,18 @@ function getLocation(location) {
     );
   }
 }
-
 var templateTwo = React.createElement(
   'div',
   null,
   React.createElement(
     'h1',
     null,
-    user.name ? user.name : 'Unkown'
+    user.name ? user.name : 'Anonymous'
   ),
-  React.createElement(
+  user.age && user.age >= 18 && React.createElement(
     'p',
     null,
+    'Age: ',
     user.age
   ),
   getLocation(user.location)
@@ -78,4 +75,4 @@ var templateTwo = React.createElement(
 
 var appRoot = document.getElementById('app');
 
-ReactDOM.render(templateOne, appRoot);
+ReactDOM.render(template, appRoot);
