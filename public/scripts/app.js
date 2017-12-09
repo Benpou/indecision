@@ -27,6 +27,41 @@ var IndecisionApp = function (_React$Component) {
   }
 
   _createClass(IndecisionApp, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      // This try and catch check to see if we have a valid json or not
+      try {
+        var json = localStorage.getItem('options');
+        var options = JSON.parse(json);
+        //console.log(options);
+
+        if (options) {
+          this.setState(function () {
+            return { options: options };
+          });
+          return;
+        }
+      } catch (e) {
+        // Do nothing
+      }
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      if (prevState.options.length !== this.state.options.length) {
+        var json = JSON.stringify(this.state.options);
+        localStorage.setItem('options', json);
+        console.log('saving data');
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      console.log('componentWillUnmount');
+    }
+  }, {
     key: 'handleDeleteOptions',
     value: function handleDeleteOptions() {
       this.setState(function () {
@@ -63,7 +98,7 @@ var IndecisionApp = function (_React$Component) {
     key: 'handleAddOption',
     value: function handleAddOption(option) {
       if (!option) {
-        return 'Enter valid calue to add item';
+        return 'Enter valid value to add item';
       } else if (this.state.options.indexOf(option) > -1) {
         return 'This option already exists';
       }
@@ -184,6 +219,11 @@ var Options = function Options(props) {
       { onClick: props.handleDeleteOptions },
       'Remove All'
     ),
+    props.options.length === 0 && React.createElement(
+      'p',
+      null,
+      'Add option to run the program'
+    ),
     props.options.map(function (option) {
       return React.createElement(Option, {
         key: option,
@@ -249,7 +289,7 @@ var AddOption = function (_React$Component2) {
     _this2.handleAddOption = _this2.handleAddOption.bind(_this2);
 
     _this2.state = {
-      error: 'undefinde'
+      error: undefined
     };
     return _this2;
   }
@@ -269,6 +309,11 @@ var AddOption = function (_React$Component2) {
           error: error
         };
       });
+
+      // This one check to see if there is no error, make the input box clear.
+      if (!error) {
+        e.target.elements.option.value = '';
+      }
     }
   }, {
     key: 'render',

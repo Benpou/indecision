@@ -11,6 +11,39 @@ class IndecisionApp extends React.Component {
     };
   }
   
+  componentDidMount() {
+    
+    // This try and catch check to see if we have a valid json or not
+    try {
+      const json = localStorage.getItem('options');
+      const options = JSON.parse(json);
+      //console.log(options);
+    
+      if (options) {
+        this.setState(() => ({options}));
+        return;
+      }
+    } catch (e) {
+      // Do nothing
+    }
+  }
+  
+  componentDidUpdate(prevProps, prevState) {
+    
+    if (prevState.options.length !== this.state.options.length) {
+      const json = JSON.stringify(this.state.options);
+      localStorage.setItem('options', json);
+      console.log('saving data');
+    }
+  }
+  
+  
+  componentWillUnmount() {
+    console.log('componentWillUnmount');
+  }
+  
+  
+  
   handleDeleteOptions() {
     this.setState(() => ({options: []}));
     // this.setState(() => {
@@ -41,7 +74,7 @@ class IndecisionApp extends React.Component {
   // On this we pass option in method
   handleAddOption(option) {
     if (!option) {
-      return 'Enter valid calue to add item';
+      return 'Enter valid value to add item';
     } else if (this.state.options.indexOf(option) > -1) {
       return 'This option already exists';
     }
@@ -141,6 +174,7 @@ const Options = (props) => {
   return (
     <div>
       <button onClick={props.handleDeleteOptions}>Remove All</button>
+      {props.options.length === 0 && <p>Add option to run the program</p>}
       {
         props.options.map((option) => (
           <Option
@@ -200,7 +234,7 @@ class AddOption extends React.Component {
     this.handleAddOption = this.handleAddOption.bind(this);
     
     this.state = {
-      error: 'undefinde'
+      error: undefined
     };
   }
   
@@ -217,6 +251,11 @@ class AddOption extends React.Component {
         error
       };
     });
+    
+    // This one check to see if there is no error, make the input box clear.
+    if (!error) {
+      e.target.elements.option.value = '';
+    }
 
   }
   render() {
